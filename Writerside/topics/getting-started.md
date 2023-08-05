@@ -47,7 +47,7 @@ public class DemoUser implements Serializable {
 }
 ```
 Once you added `@AdminModel` annotation, navigate to admin site (`/admin/DemoUser/`) and see if it works: 
-![Demo User list view](listview-001.png)
+![Demo User list view](../images/listview-001.png)
 
 ### Customizing List View
 First column is always a link leading to edit form, but we'll cover that later.
@@ -56,7 +56,7 @@ To start, we want to rearrange our list view columns:
 @AdminModel(listFields = {"username", "enabled"})
 ```
 Restart admin site and open our entity again
-![Demo User list view rearranged](listview-002.png)
+![Demo User list view rearranged](../images/listview-002.png)
 Much better. Also note, that `Enabled` column now contains cross- and check-marks instead of text because the field is of type boolean.
 
 #### Filtering
@@ -69,10 +69,10 @@ We want to quickly select only enabled or disabled users, let's modify our annot
 )
 ```
 Restart the admin site, and you will see the filter option for the enabled status in the list view:
-![Demo User list view with filter](listview-003.png)
+![Demo User list view with filter](../images/listview-003.png)
 You can have as many filters for an entity as you'd like, but remember to add appropriate database indexes for query efficiency.
 
-#### Custom List Fields
+#### Custom List Fields {id="custom-list-fields_1"}
 Sometimes, the entity's fields aren't sufficient to display all the required information.
 Luckily, we can create custom list fields.
 For example, let's add a custom field to display the number of posts for each Demo User:
@@ -98,7 +98,7 @@ Now let's say we want to be able to sort our Demo Users by username. Annotate `u
 @AdminField(sortable = true)
 ```
 Restart admin site, and now you can sort users!
-![Demo User list view with sorting](listview-005.png)
+![Demo User list view with sorting](../images/listview-005.png)
 Most of the fields can be annotated with `sortable = true`.
 For relation attributes you can specify `sortBy`. For example, if you want to sort Posts by author username, it will look like:
 ```java
@@ -119,9 +119,9 @@ To enable searching for Demo Users by their ids and usernames, modify the `@Admi
 )
 ```
 As before, restart admin site and try searching:
-![Demo User list view with search field](listview-006.png)
+![Demo User list view with search field](../images/listview-006.png)
 
-### Edit Restrictions
+### Edit Restrictions {id="edit-restrictions_1"}
 It is possible to disable creation or modification of any particular entity.
 For example, you can disable the creation of new entities by setting `insertable = false` in the `@AdminModel` annotation.
 Similarly, using `updatable = false` disables the modification of existing records while still allowing the creation of new ones.
@@ -151,7 +151,7 @@ For example, let's define custom actions to enable and disable Demo Users:
     }
 ```
 That's it! After restarting the admin site, the custom actions will be available for selected Demo Users in the list view:
-![Demo User list view with custom actions](listview-007.png)
+![Demo User list view with custom actions](../images/listview-007.png)
 Methods for custom actions must be static (except for the case when they are defined on a separate model-admin class, more on this later) and must accept a single argument with the list of selected entity records.
 
 #### Site-Wide Custom Action
@@ -207,13 +207,13 @@ public class DemoUser implements Serializable {
     ...
 }
 ```
-![Demo User list view final result](listview-008.png)
+![Demo User list view final result](../images/listview-008.png)
 
 ### Field Representation
 Custom field representation is used for both the list view and the form view.
 Let's focus on the list view for now. Also, we'll switch to the `Post` entity.  
 Remember the `author` field where we added a custom `sortBy` attribute? By default, it looks like this:
-![Post list view with default author representation](listview-009.png)
+![Post list view with default author representation](../images/listview-009.png)
 This default representation is simply the result of calling `.toString()`, which isn't very useful for most complex types.
 The values for the `Author` filter also don't provide much help.  
 Let's adjust the annotation to include a custom `representation`:
@@ -221,7 +221,7 @@ Let's adjust the annotation to include a custom `representation`:
 @AdminField(sortBy = "username", representation = "username")
 ```
 The result is much more helpful:
-![Post list view with custom author representation](listview-010.png)
+![Post list view with custom author representation](../images/listview-010.png)
 The `representation` is an expression in [SpEL](https://docs.spring.io/spring-framework/docs/3.0.x/reference/expressions.html) format, with the root object set to the entity being displayed.
 In most cases, you simply want to reference a field, like `username` in our case, or call a method of an entity.
   
@@ -234,7 +234,7 @@ We don't want to set a custom `representation` to avoid affecting the form view,
     }
 ```
 By setting the `label`, we can display the column title as "Text" instead of "Text Preview":
-![Post list view with text preview](listview-011.png)
+![Post list view with text preview](../images/listview-011.png)
 
 ### Forms
 Let's continue with our `Post` entity and move on to the Edit Form.
@@ -257,7 +257,7 @@ To override the fieldset and include only the fields we are interested in editin
 )
 ```
 The result will be a form with the specified fields:
-![Edit Form with overridden fieldset](form-001.png)  
+![Edit Form with overridden fieldset](../images/form-001.png)  
 Next, let's move the `category` and `tags` fields into a dedicated fieldset named "Meta":
 ```java
 @AdminModel(
@@ -277,7 +277,7 @@ Next, let's move the `category` and `tags` fields into a dedicated fieldset name
         }
 )
 ```
-![Edit Form with labeled Meta fieldset](form-002.png)  
+![Edit Form with labeled Meta fieldset](../images/form-002.png)  
 
 #### Edit Restrictions
 Note that the "Author" field isn't editable.
@@ -303,13 +303,13 @@ To customize their appearance, we can provide them with `template` settings, in 
     @AdminField(template = "admin/widget/multiselect_checkboxes", representation = "text")
     private Set<Tag> tags;
 ```
-![Edit Form with custom templates](form-003.png)  
+![Edit Form with custom templates](../images/form-003.png)  
 Field templates are simple [Thymeleaf fragments](https://www.thymeleaf.org/doc/articles/layouts.html), and you can further customize the appearance of the edit form by creating your own custom field templates.
 
 #### Raw ID Fields
 We have the option to display the `author` field as a raw ID input instead of a select dropdown with all existing Demo Users.
 To achieve this, simply add `rawId = true` to the `@AdminField` annotation for the `author` field, without the need to change the `template` attribute.
-![Edit Form with raw id](form-005.png)
+![Edit Form with raw id](../images/form-005.png)
 
 #### Validation
 Spring JPA Admin utilizes [Jakarta Validation](https://beanvalidation.org/) to validate entities before saving them.  
@@ -321,7 +321,7 @@ Let's try it out and annotate the `text` field with `@NotBlank`:
     private String text;
 ```
 Now, if we try to save a Post with an empty text, a validation error will be displayed:
-![Edit Form validation error](form-004.png)
+![Edit Form validation error](../images/form-004.png)
 You can narrow the applicability of validation constraints to be processed only by the admin edit form by specifying `groups = AdminValidation.class`.
 This allows you to separate the validation rules for the admin form from other parts of your application.  
 For example, the following annotation will only be applied to the admin edit form and won't affect other parts of your application, such as entity persistence:
@@ -357,17 +357,17 @@ So our complete `DemoUser` admin annotation looks following:
 )
 ```
 Let's take a look at the edit form now:
-![Edit Form with relation links](form-006.png)
+![Edit Form with relation links](../images/form-006.png)
 
 By clicking on "Blog Post", users now can quickly navigate to the `Post` list view, where they will see only posts created by the "Demo Editor":
-![List View by User](listview-012.png)  
+![List View by User](../images/listview-012.png)  
 One last enhancement we want to add is to include previews for the latest Posts created by user.
 To enable this, modify the `@AdminLink` annotation to include the `preview` attribute, as shown below:
 ```java
 @AdminLink(target = Post.class, preview = 3, sortBy = "-postTime")
 ```
 Now, when we review the updated Edit Form, we can see previews for the latest user Posts:
-![Edit Form with link previews](form-007.png)  
+![Edit Form with link previews](../images/form-007.png)  
 These relation links and previews provide users with quick access to related content, making the admin interface more user-friendly and efficient.  
 
 ### Externalized Configuration
