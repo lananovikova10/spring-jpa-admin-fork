@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="sjad"
+                 name="Spring JPA Admin Documentation"
+                 start-page="starter-topic.md">
+
+    <toc-element topic="starter-topic.md"/>
+    <toc-element topic="Topic-number-3.md"/>
+    <toc-element topic="Spring-JPA-Admin-Getting-Started.md"/>
+    <toc-element topic="Topic-number-2.md"/>
+</instance-profile>
